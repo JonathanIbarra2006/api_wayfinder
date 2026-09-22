@@ -13,7 +13,13 @@ import java.util.Date;
 public class JwtUtil {
 
     // Genera una clave secreta súper segura automáticamente (Requisito de JJWT 0.11+)
-    private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    //private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // BORRA O COMENTA ESTA LÍNEA:
+    // private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+    // AÑADE ESTO (Tu llave estática e inmutable):
+    private final String SECRET_STRING = "WayFinderApp2026SuperSecretaClaveMaestraSegura123!";
+    private final Key SECRET_KEY = io.jsonwebtoken.security.Keys.hmacShaKeyFor(SECRET_STRING.getBytes());
 
     // Método para crear el token cuando el usuario inicie sesión
     public String generarToken(String email) {
