@@ -30,8 +30,11 @@ public class ReporteComunidad {
     @Column(name = "fecha_reporte", insertable = false, updatable = false)
     private LocalDateTime fechaReporte;
 
-    // --- GETTERS Y SETTERS COMPLETO ---
+    // NUEVO CAMPO: Contador de votos negativos
+    @Column(name = "votos_negativos")
+    private Integer votosNegativos = 0;
 
+    // --- GETTERS Y SETTERS COMPLETO ---
     public Integer getIdReporte() { return idReporte; }
     public void setIdReporte(Integer idReporte) { this.idReporte = idReporte; }
 
@@ -48,4 +51,8 @@ public class ReporteComunidad {
     public void setEstadoActivo(Boolean estadoActivo) { this.estadoActivo = estadoActivo; }
 
     public LocalDateTime getFechaReporte() { return fechaReporte; }
+
+    // NUEVOS GETTERS Y SETTERS
+    public Integer getVotosNegativos() { return votosNegativos; }
+    public void setVotosNegativos(Integer votosNegativos) { this.votosNegativos = votosNegativos; }
 }
