@@ -47,30 +47,28 @@ public class ReporteController {
     // NUEVO ENDPOINT: Recibe los votos de confirmación o descarte
     @PostMapping("/{id}/votar")
     public ResponseEntity<String> votarReporte(@PathVariable Integer id, @RequestParam String accion) {
-        // Buscamos el reporte por su ID
         Optional<ReporteComunidad> reporteOpt = reporteRepository.findById(id);
 
         if (reporteOpt.isPresent()) {
             ReporteComunidad reporte = reporteOpt.get();
 
-            // Si el usuario tocó el botón rojo de "Ya no está"
             if ("descartar".equalsIgnoreCase(accion)) {
-                // Obtenemos los votos actuales y sumamos uno (protegiendo contra nulos)
                 int votosActuales = reporte.getVotosNegativos() != null ? reporte.getVotosNegativos() : 0;
                 reporte.setVotosNegativos(votosActuales + 1);
 
-                // Sistema de reputación: Si llega a 3 votos negativos, se borra físicamente
+                // Imprime el conteo exacto en tu terminal de IntelliJ
+                System.out.println("⚠️ REPORTE " + id + " | Voto negativo recibido. Total actuales: " + reporte.getVotosNegativos() + "/3");
+
                 if (reporte.getVotosNegativos() >= 3) {
                     reporteRepository.delete(reporte);
+                    System.out.println("🗑️ REPORTE " + id + " | Eliminado definitivamente del mapa.");
                     return ResponseEntity.ok("Alerta eliminada del mapa por la comunidad.");
                 }
             }
 
-            // Si fue voto positivo o aún no llega a 3, simplemente guardamos el cambio
             reporteRepository.save(reporte);
             return ResponseEntity.ok("Voto registrado con éxito.");
         }
-
         return ResponseEntity.notFound().build();
     }
 }
