@@ -7,4 +7,6 @@ import java.util.List;
 public interface PuntoInteresRepository extends JpaRepository<PuntoInteres, Integer> {
     // Busca todos los puntos de interés que pertenezcan a una ruta específica
     List<PuntoInteres> findByIdRuta(Integer idRuta);
+    // Buscar puntos de interés por su id_tipo
+    List<PuntoInteres> findByIdTipo(Integer idTipo);
 }

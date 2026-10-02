@@ -36,4 +36,35 @@ public class PoiController {
 
         return ResponseEntity.ok(poisFormateados);
     }
+
+    // 👇 MÉTODO CORREGIDO
+    @GetMapping("/categoria/{nombreCategoria}")
+    public ResponseEntity<?> obtenerPoisPorCategoria(@PathVariable String nombreCategoria) {
+        int idTipo = 0;
+
+        // Traducimos el texto que envía Flutter al ID de la base de datos
+        switch (nombreCategoria) {
+            case "Gasolineras": idTipo = 1; break;
+            case "Restaurantes": idTipo = 2; break;
+            case "Miradores": idTipo = 3; break;
+            case "Talleres": idTipo = 4; break;
+            default: return ResponseEntity.badRequest().body("Categoría no válida");
+        }
+
+        // CORRECCIÓN 1: Usamos la variable correcta "poiRepository"
+        List<PuntoInteres> puntos = poiRepository.findByIdTipo(idTipo);
+
+        // CORRECCIÓN 2: Mapeamos la entidad al PoiDTO para que Flutter reciba latitud y longitud limpios
+        List<PoiDTO> poisFormateados = puntos.stream().map(poi -> {
+            return new PoiDTO(
+                    poi.getIdPoi(),
+                    poi.getNombre(),
+                    poi.getIdTipo(),
+                    poi.getCoordenadas().getY(), // Y = Latitud
+                    poi.getCoordenadas().getX()  // X = Longitud
+            );
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(poisFormateados);
+    }
 }
